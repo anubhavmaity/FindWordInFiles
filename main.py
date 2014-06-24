@@ -11,10 +11,11 @@ def main():
     freq_word = dict() 
     
     #reading multiple files and tokenizing the contents of the files
-    for f in glob.glob('*.txt'):
+    for f in glob.glob('*.html'):
         file_content = open(f).read()
         tokenizer = RegexpTokenizer(r'\w+')
         words = tokenizer.tokenize(file_content)
+        #creating inverted index data structure
         for word in words:
             #keeping all the words in lower case
             word = word.lower()
