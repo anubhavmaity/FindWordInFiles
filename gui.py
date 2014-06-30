@@ -43,7 +43,7 @@ class gui(wx.Frame):
         #SIZER
         self.windowSizer = wx.BoxSizer()
         self.windowSizer.Add(self.panel, 1, wx.ALL | wx.EXPAND)
-        self.sizer = wx.GridBagSizer(5, 5)
+        self.sizer = wx.GridBagSizer(10, 10)
 
         self.dir = os.getcwd()
         FilePickerCtrlNameStr = os.getcwd() 
@@ -92,9 +92,8 @@ class gui(wx.Frame):
     
     def run_program(self, event):
         frame = SecondFrame()
-        
-        
         keyword =  self.search_name.GetValue()
+
         files_list = []
         for file_path in self.fileCtrl:
             files_list.append(file_path.GetPath())
