@@ -4,14 +4,41 @@ import main
 
 MAXIMUM_ALLOWED_FILES = 6
 
+class SecondFrame(wx.Frame):
+    #----------------------------------------------------------------------
+    def __init__(self):
+        """Constructor"""
+        wx.Frame.__init__(self, None, title="Results", size=(500,500))
+        self.panel = wx.Panel(self)
+        #results list
+        self.files_result = []
+        #SIZER
+        self.windowSizer = wx.BoxSizer()
+        self.windowSizer.Add(self.panel, 1, wx.ALL | wx.EXPAND)
+        self.sizer = wx.GridBagSizer(5, 5)
+        #Results label
+        self.files_location_label = wx.StaticText(self.panel, -1, "Results:", (10,10))
+        self.sizer.Add(self.files_location_label, (5,5))
+
+    def get_results_from_search(self,files_with_word, freq):
+
+        self.word_occ_label = wx.StaticText(self.panel, -1, str(freq) +" occurences", (10,25))
+        self.sizer.Add(self.word_occ_label, (5,5))
+        for i, files in enumerate(files_with_word):
+            self.files_result.append(wx.StaticText(self.panel, -1, files, (10, 20 + (i+1)*20)))
+            self.sizer.Add(self.files_result[-1], (5,5))
+
+
+
 class gui(wx.Frame):
 
     def __init__(self, parent, id):
-        wx.Frame.__init__(self,parent,id,'Find Words In Files', size=(1000,500))
+        wx.Frame.__init__(self,parent,id,'Find Words In Files', size=(600,500))
         self._defaultDirectory = "/home"
-        self.panel = wx.Panel(self)
+        self.panel = wx.ScrolledWindow(self,wx.ID_ANY)
+        self.panel.SetScrollbars(1, 1, 2, 3)
 
-        self.files_result = []
+        
 
         #SIZER
         self.windowSizer = wx.BoxSizer()
@@ -47,10 +74,7 @@ class gui(wx.Frame):
         self.button_run = wx.Button(self.panel, label="Search", pos=(500,440), size=(70,35))
         self.Bind(wx.EVT_BUTTON, self.run_program, self.button_run)
 
-        #Results
-        self.files_location_label = wx.StaticText(self.panel, -1, "Results:", (370,120))
-        self.sizer.Add(self.files_location_label, (5,5))
-
+        
 
     def add_files_button(self, event):
 
@@ -67,17 +91,21 @@ class gui(wx.Frame):
         self.no_of_files = self.no_of_files - 1
     
     def run_program(self, event):
-        keyword =  self.search_name.GetValue()
+        frame = SecondFrame()
         
+        
+        keyword =  self.search_name.GetValue()
         files_list = []
         for file_path in self.fileCtrl:
             files_list.append(file_path.GetPath())
         
         files_with_word, freq = main.search(keyword, files_list)
+
+        frame.get_results_from_search(files_with_word, freq)
+        frame.Show()
+
+                
         
-        for i, files in enumerate(files_with_word):
-            self.files_result.append(wx.StaticText(self.panel, -1, files, (370, 120+(i+1)*20)))
-            self.sizer.Add(self.files_result[-1], (5,5))
 
 
     
