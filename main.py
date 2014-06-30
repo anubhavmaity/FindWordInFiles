@@ -2,6 +2,11 @@ import sys
 import nltk
 import glob
 from nltk.tokenize import RegexpTokenizer
+from nltk import PorterStemmer
+
+def stemming(word):
+    word = PorterStemmer().stem_word(word.lower())
+    return word
 
 def create_inverse_index(files_list):
     #creating a dictionary of words
@@ -18,7 +23,7 @@ def create_inverse_index(files_list):
         #creating inverted index data structure
         for word in words:
             #keeping all the words in lower case
-            word = word.lower()
+            word = stemming(word)
             if word not in index.keys():
                 index[word] = [f]
             else:
@@ -32,6 +37,7 @@ def create_inverse_index(files_list):
 
 def search(term, files_list):
     index, freq_word = create_inverse_index(files_list)
+    term = stemming(term)
     if term in index.keys():
         print index[term], freq_word[term]
         return index[term], freq_word[term]
