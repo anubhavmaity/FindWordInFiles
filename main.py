@@ -3,7 +3,7 @@ import nltk
 import glob
 from nltk.tokenize import RegexpTokenizer
 
-def main():
+def create_inverse_index(files_list):
     #creating a dictionary of words
     index = dict()
 
@@ -11,7 +11,7 @@ def main():
     freq_word = dict() 
     
     #reading multiple files and tokenizing the contents of the files
-    for f in glob.glob('*.html'):
+    for f in files_list:
         file_content = open(f).read()
         tokenizer = RegexpTokenizer(r'\w+')
         words = tokenizer.tokenize(file_content)
@@ -28,11 +28,19 @@ def main():
         freq_word[word] = len(index[word])
         index[word] = list(set(index[word]))
 
-    print index
-    print freq_word
+    return index, freq_word
+
+def search(term, files_list):
+    index, freq_word = create_inverse_index(files_list)
+    if term in index.keys():
+        print index[term], freq_word[term]
+        return index[term], freq_word[term]
+    else:
+        return "No files found", 0
 
 
 
 
 if __name__ == '__main__':
-    main()
+    files_list = ['adventur.txt', 'apples.txt', 'hVDacrN0.html']
+    search('html', files_list)
