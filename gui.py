@@ -45,8 +45,7 @@ class gui(wx.Frame):
         self.windowSizer.Add(self.panel, 1, wx.ALL | wx.EXPAND)
         self.sizer = wx.GridBagSizer(10, 10)
 
-        self.dir = os.getcwd()
-        FilePickerCtrlNameStr = os.getcwd() 
+        
         self.no_of_files = 1
         self.fileCtrl = []
         #search
@@ -61,7 +60,7 @@ class gui(wx.Frame):
         #Adding file button
         self.button = wx.Button(self.panel, label="Add Files/Folders", pos=(100,150), size=(130,35))
         self.sizer.Add(self.button, (5,5))
-        self.fileCtrl.append(wx.FilePickerCtrl(self.panel, path=self.dir,name=FilePickerCtrlNameStr, pos=(100, 200), size=(260,35)))
+        self.fileCtrl.append(wx.FilePickerCtrl(self.panel, pos=(100, 200), size=(260,35)))
         self.Bind(wx.EVT_BUTTON, self.add_files_button, self.button)
         self.sizer.Add(self.fileCtrl[0], (5,5))
         #Removing file button
@@ -80,7 +79,7 @@ class gui(wx.Frame):
 
         if self.no_of_files <= MAXIMUM_ALLOWED_FILES:
             height = self.no_of_files * 35 + 200
-            self.fileCtrl.append(wx.FilePickerCtrl(self.panel, path=self.dir, pos=(100, height), size=(260,35)))
+            self.fileCtrl.append(wx.FilePickerCtrl(self.panel, pos=(100, height), size=(260,35)))
             self.sizer.Add(self.fileCtrl[self.no_of_files], (5,5))
             self.no_of_files = self.no_of_files + 1
 
@@ -97,12 +96,21 @@ class gui(wx.Frame):
         files_list = []
         for file_path in self.fileCtrl:
             files_list.append(file_path.GetPath())
+
         
-        files_with_word, freq = main.search(keyword, files_list)
+        files_list = filter(None, files_list)
+        print files_list
+        
+        if files_list:
+            files_with_word, freq = main.search(keyword, files_list)
 
-        frame.get_results_from_search(files_with_word, freq)
-        frame.Show()
+            frame.get_results_from_search(files_with_word, freq)
+            frame.Show()
+        else:
 
+            box = wx.MessageDialog(None, 'Files not mentioned', 'Ivalid Request', wx.OK)
+            answer = box.ShowModal()
+            box.Destroy()
                 
         
 
