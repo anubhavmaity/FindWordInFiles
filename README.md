@@ -19,4 +19,4 @@ HOW TO RUN THE PROGRAM?
 
 SCREENSHOTS
 
-https://github.com/anubhavmaity/FindWordInFiles/blob/master/snaphots/main_window_with_results.png
+![Alt MainWindow](https://github.com/anubhavmaity/FindWordInFiles/blob/master/snaphots/main_window_with_results.png "Main Window")
